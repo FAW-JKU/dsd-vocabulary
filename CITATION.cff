@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this vocabulary, please cite it as below."
+authors:
+- family-names: "Ehrlinger"
+  given-names: "Lisa"
+  orcid: "https://orcid.org/0000-0001-5313-0368"
+- family-names: "Schrott"
+  given-names: "Johannes"
+  orcid: "https://orcid.org/0000-0002-7830-3138"
+- family-names: "Wöß"
+  given-names: "Wolfram"
+title: "DSD: The Data Source Description Vocabulary"
+version: 4.0
+url: "https://github.com/FAW-JKU/dsd-vocabulary"
