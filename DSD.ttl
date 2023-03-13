@@ -1,558 +1,592 @@
-@prefix : <http://dqm.faw.jku.at/ontologies/dsd_v3#> .
+@prefix dsd: <https://w3id.org/dsd#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
 @prefix void: <http://rdfs.org/ns/void#> .
-@base <http://dqm.faw.jku.at/ontologies/dsd_v3> .
+@prefix schema: <http://schema.org/> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@base <https://w3id.org/dsd> .
 
-<http://dqm.faw.jku.at/ontologies/dsd_v3> rdf:type owl:Ontology ;
-                                rdfs:comment "This document specifies a vocabulary for a generic description of a data source, its components and quality annotations."@en ;
-                                rdfs:isDefinedBy <http://dqm.faw.jku.at/ontologies/dsd_v3> ;
-                                rdfs:label "Quality Annotations for Data Source Schemas"@en ;
-                                owl:versionInfo "3.0"^^xsd:double .
+<https://w3id.org/dsd> rdf:type owl:Ontology ;
+                        owl:versionIRI <https://w3id.org/dsd/4.0.0> ;
+                        dcterms:contributor [ rdf:type foaf:Person ;
+                                              foaf:homepage <https://orcid.org/0000-0003-2689-0876> ;
+                                              foaf:mbox <mailto:johannes.schrott@jku.at> ;
+                                              foaf:name "Johannes Schrott"
+                                            ] ;
+                        dcterms:created "2015-09-17" ;
+                        dcterms:creator [ rdf:type foaf:Person ;
+                                          foaf:homepage <https://orcid.org/0000-0001-5313-0368> ;
+                                          foaf:mbox <mailto:lisa.ehrlinger@scch.at> ;
+                                          foaf:name "Lisa Ehrlinger"
+                                        ] ;
+                        dcterms:description "The Data Source Description Vocabulary (DSD) allows the representation of data sources and their internal structure independently of their type. The figure below provides an overview on OWL classes and object properties present in the vocabulary. For simplicity, inverse object properties and some subclasses are not shown. Additionally, a distinction between \"essential\" OWL classes, that are required for the description of data sources, and \"optional\" classes, which provide additional non-necessary features, is being made.<br><img src=\"https://dqm.faw.jku.at/ontologies/dsd/4.0.0/DSD4.png\" style=\"width: calc(100%); max-width: 1000px\">" ;
+                        dcterms:license "LGPL-2.1 license", <https://w3id.org/dsd/LICENSE> ;
+                        dcterms:modified "2023-03-06" ;
+                        dcterms:publisher [ rdf:type foaf:Organization ;
+                                            foaf:homepage "https://www.jku.at/faw" ;
+                                            foaf:name "Institute for Application-oriented Knowledge Processeing, Johannes Kepler University Linz, Austria"
+                                          ] ;
+                        dcterms:title "The Data Source Description Vocabulary" ;
+                        vann:preferredNamespacePrefix "dsd" ;
+                        vann:preferredNamespaceUri "https://w3id.org/dsd#" ;
+                        schema:citation "Cite this vocabulary as: Ehrlinger, L. The Data Source Description vocabulary 4.0.0."@en ;
+                        dcterms:issued "2023-03-06"^^xsd:date ;
+                        owl:versionInfo "4.0.0" ;
+                        foaf:depiction <https://dqm.faw.jku.at/ontologies/dsd/4.0.0/DSD4.png> .
+
+
 
 #################################################################
 #    Object Properties
 #################################################################
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#consistsOfAttribute
-:consistsOfAttribute rdf:type owl:ObjectProperty ;
-                     rdfs:domain [ rdf:type owl:Class ;
-                                   owl:unionOf ( :ForeignKey
-                                                 :PrimaryKey
-                                               )
-                                 ] ;
-                     rdfs:range :Attribute ;
-                     rdfs:comment "A Primary or Foreign Key consists of one or several Attributes."@en ;
-                     rdfs:isDefinedBy :consistsOfAttribute ;
-                     rdfs:label "consistsOfAttributes"@en .
+###  https://w3id.org/dsd#consistsOfAttribute
+dsd:consistsOfAttribute rdf:type owl:ObjectProperty ;
+                        rdfs:domain [ rdf:type owl:Class ;
+                                      owl:unionOf ( dsd:ForeignKey
+                                                    dsd:PrimaryKey
+                                                  )
+                                    ] ;
+                        rdfs:range dsd:Attribute ;
+                        rdfs:comment "A Primary or Foreign Key consists of one or several Attributes."@en ;
+                        rdfs:isDefinedBy dsd:consistsOfAttribute ;
+                        rdfs:label "consists of Attributes"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#hasAggregation
-:hasAggregation rdf:type owl:ObjectProperty ;
-                rdfs:subPropertyOf :hasAssociationMember ;
-                rdf:type owl:FunctionalProperty ;
-                rdfs:domain :AggregationAssociation ;
-                rdfs:range :Concept ;
-                rdfs:comment "Describes the connection between an AggregationAssociation and its Aggregation." ;
-                rdfs:isDefinedBy :hasAggregation ;
-                rdfs:label "hasAggregation" .
+###  https://w3id.org/dsd#hasAggregation
+dsd:hasAggregation rdf:type owl:ObjectProperty ;
+                   rdfs:subPropertyOf dsd:hasAssociationMember ;
+                   rdf:type owl:FunctionalProperty ;
+                   rdfs:domain dsd:AggregationAssociation ;
+                   rdfs:range dsd:Concept ;
+                   rdfs:comment "Describes the connection between an AggregationAssociation and its Aggregation." ;
+                   rdfs:isDefinedBy dsd:hasAggregation ;
+                   rdfs:label "has Aggregation"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#hasAggregationComponent
-:hasAggregationComponent rdf:type owl:ObjectProperty ;
-                         rdfs:subPropertyOf :hasAssociationMember ;
-                         rdfs:domain :AggregationAssociation ;
-                         rdfs:range :Concept ;
-                         rdfs:comment "Describes the connection between an AggregationAssociation and one of its components." ;
-                         rdfs:isDefinedBy :hasAggregationComponent ;
-                         rdfs:label "hasAggregationComponent" .
+###  https://w3id.org/dsd#hasAggregationComponent
+dsd:hasAggregationComponent rdf:type owl:ObjectProperty ;
+                            rdfs:subPropertyOf dsd:hasAssociationMember ;
+                            rdfs:domain dsd:AggregationAssociation ;
+                            rdfs:range dsd:Concept ;
+                            rdfs:comment "Describes the connection between an AggregationAssociation and one of its components." ;
+                            rdfs:isDefinedBy dsd:hasAggregationComponent ;
+                            rdfs:label "has Aggregation Component" .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#hasAssociationMember
-:hasAssociationMember rdf:type owl:ObjectProperty ;
-                      rdfs:subPropertyOf owl:topObjectProperty ;
-                      rdfs:domain :Association ;
-                      rdfs:range :Concept ;
-                      rdfs:comment "Describes the edges from an Association to its Members (Parent, Child, Aggregation, Component)."@en ;
-                      rdfs:isDefinedBy :hasAssociationMember ;
-                      rdfs:label "hasAssociationMember"@en .
+###  https://w3id.org/dsd#hasAssociationMember
+dsd:hasAssociationMember rdf:type owl:ObjectProperty ;
+                         rdfs:subPropertyOf owl:topObjectProperty ;
+                         rdfs:domain dsd:Association ;
+                         rdfs:range dsd:Concept ;
+                         rdfs:comment "Describes the edges from an Association to its Members (Parent, Child, Aggregation, Component)."@en ;
+                         rdfs:isDefinedBy dsd:hasAssociationMember ;
+                         rdfs:label "has Association Member"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#hasAttribute
-:hasAttribute rdf:type owl:ObjectProperty ;
-              owl:inverseOf :isAttributeOf ;
-              rdfs:domain [ rdf:type owl:Class ;
-                            owl:unionOf ( :Association
-                                          :Concept
-                                        )
-                          ] ;
-              rdfs:range :Attribute ;
-              rdfs:comment "Describes the number of Attributes a Concept or Association comprises."@en ;
-              rdfs:isDefinedBy :hasAttribute ;
-              rdfs:label "hasAttribute"@en .
+###  https://w3id.org/dsd#hasAttribute
+dsd:hasAttribute rdf:type owl:ObjectProperty ;
+                 owl:inverseOf dsd:isAttributeOf ;
+                 rdfs:domain [ rdf:type owl:Class ;
+                               owl:unionOf ( dsd:Association
+                                             dsd:Concept
+                                           )
+                             ] ;
+                 rdfs:range dsd:Attribute ;
+                 rdfs:comment "Describes the number of Attributes a Concept or Association comprises."@en ;
+                 rdfs:isDefinedBy dsd:hasAttribute ;
+                 rdfs:label "has Attribute"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#hasChild
-:hasChild rdf:type owl:ObjectProperty ;
-          rdfs:subPropertyOf :hasAssociationMember ;
-          rdfs:domain :InheritanceAssociation ;
-          rdfs:range :Concept ;
-          rdfs:comment "Describes the connection between an InheritanceAssociation and one of its childs." ;
-          rdfs:isDefinedBy :hasChild .
+###  https://w3id.org/dsd#hasChild
+dsd:hasChild rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf dsd:hasAssociationMember ;
+             rdfs:domain dsd:InheritanceAssociation ;
+             rdfs:range dsd:Concept ;
+             rdfs:comment "Describes the connection between an InheritanceAssociation and one of its childs." ;
+             rdfs:isDefinedBy dsd:hasChild ;
+             rdfs:label "has Child"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#hasComponent
-:hasComponent rdf:type owl:ObjectProperty ;
-              owl:inverseOf :isComponentOf ;
-              rdfs:domain [ rdf:type owl:Class ;
-                            owl:unionOf ( :Datasource
-                                          :Schema
-                                        )
-                          ] ;
-              rdfs:range [ rdf:type owl:Class ;
-                           owl:unionOf ( :Association
-                                         :Attribute
-                                         :Concept
-                                         :ForeignKey
-                                         :PrimaryKey
-                                       )
-                         ] ;
-              rdfs:comment "Describes the number of components a Datasource comprises." ;
-              rdfs:isDefinedBy :hasComponent ;
-              rdfs:label "hasComponent" .
-
-
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#hasForeignKey
-:hasForeignKey rdf:type owl:ObjectProperty ;
-               rdfs:domain [ rdf:type owl:Class ;
-                             owl:unionOf ( :Association
-                                           :Concept
-                                         )
-                           ] ;
-               rdfs:range :ForeignKey ;
-               rdfs:isDefinedBy :hasForeignKey .
-
-
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#hasParent
-:hasParent rdf:type owl:ObjectProperty ;
-           rdfs:subPropertyOf :hasAssociationMember ;
-           rdfs:domain :InheritanceAssociation ;
-           rdfs:range :Concept ;
-           rdfs:comment "Describes the connection between an InheritanceAssociation and a parent Concept." ;
-           rdfs:isDefinedBy :hasParent ;
-           rdfs:label "hasParent" .
-
-
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#hasPrimaryKey
-:hasPrimaryKey rdf:type owl:ObjectProperty ,
-                        owl:FunctionalProperty ;
-               rdfs:domain [ rdf:type owl:Class ;
-                             owl:unionOf ( :Association
-                                           :Concept
-                                         )
-                           ] ;
-               rdfs:range :PrimaryKey ;
-               rdfs:isDefinedBy :hasPrimaryKey .
-
-
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#hasSchema
-:hasSchema rdf:type owl:ObjectProperty ;
-           owl:inverseOf :isSchemaOf ;
-           rdf:type owl:InverseFunctionalProperty ;
-           rdfs:domain :Datasource ;
-           rdfs:range :Schema .
-
-
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#isAttributeOf
-:isAttributeOf rdf:type owl:ObjectProperty ;
-               rdfs:domain :Attribute ;
-               rdfs:range [ rdf:type owl:Class ;
-                            owl:unionOf ( :Association
-                                          :Concept
-                                        )
-                          ] ;
-               rdfs:comment "Describes an Attributes's connection to its Concept or Association."@en ;
-               rdfs:isDefinedBy :isAttributeOf ;
-               rdfs:label "isAttributeOf"@en .
-
-
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#isComponentOf
-:isComponentOf rdf:type owl:ObjectProperty ;
-               rdfs:domain [ rdf:type owl:Class ;
-                             owl:unionOf ( :Association
-                                           :Attribute
-                                           :Concept
-                                           :ForeignKey
-                                           :PrimaryKey
-                                         )
-                           ] ;
-               rdfs:range [ rdf:type owl:Class ;
-                            owl:unionOf ( :Datasource
-                                          :Schema
-                                        )
-                          ] ;
-               rdfs:comment "Describes a components connection to its Datasource."@en ;
-               rdfs:isDefinedBy :isComponentOf ;
-               rdfs:label "isComponentOf"@en .
-
-
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#isOfDataType
-:isOfDataType rdf:type owl:ObjectProperty ,
-                       owl:FunctionalProperty ,
-                       owl:AsymmetricProperty ;
-              rdfs:domain :Attribute ;
-              rdfs:comment "Describes an Attribute with an XLS Datatype."@en ;
-              rdfs:isDefinedBy :isOfDataType ;
-              rdfs:label "isOfDataType"@en .
-
-
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#isOfDatasourceType
-:isOfDatasourceType rdf:type owl:ObjectProperty ,
-                             owl:FunctionalProperty ,
-                             owl:AsymmetricProperty ;
-                    rdfs:domain :Datasource ;
-                    rdfs:range :DatasourceType ;
-                    rdfs:comment "Describes the type of datasource a Datasource has. This Ontology provides some Individuals that can be used."@en ;
-                    rdfs:isDefinedBy :isOfDatasourceType ;
-                    rdfs:label "isOfDatasourceType"@en .
-
-
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#isSchemaOf
-:isSchemaOf rdf:type owl:ObjectProperty ,
-                     owl:FunctionalProperty ;
-            rdfs:domain :Schema ;
-            rdfs:range :Datasource .
-
-
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#providesAccess
-:providesAccess rdf:type owl:ObjectProperty ,
-                         owl:AsymmetricProperty ;
-                rdfs:domain [ rdf:type owl:Class ;
-                              owl:unionOf ( :Association
-                                            :Concept
-                                            :Datasource
+###  https://w3id.org/dsd#hasComponent
+dsd:hasComponent rdf:type owl:ObjectProperty ;
+                 owl:inverseOf dsd:isComponentOf ;
+                 rdfs:domain [ rdf:type owl:Class ;
+                               owl:unionOf ( dsd:Datasource
+                                             dsd:Schema
+                                           )
+                             ] ;
+                 rdfs:range [ rdf:type owl:Class ;
+                              owl:unionOf ( dsd:Association
+                                            dsd:Attribute
+                                            dsd:Concept
+                                            dsd:ForeignKey
+                                            dsd:PrimaryKey
                                           )
                             ] ;
-                rdfs:range :Stakeholder ;
-                rdfs:comment "A datasource or part of a datasource (e.g. a concept) may provide access to one or more stakeholder."^^xsd:string ;
-                rdfs:isDefinedBy :providesAccess ;
-                rdfs:label "providesAccess"^^xsd:string .
+                 rdfs:comment "Describes the number of components a Datasource comprises." ;
+                 rdfs:isDefinedBy dsd:hasComponent ;
+                 rdfs:label "has Component"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#referencesFrom
-:referencesFrom rdf:type owl:ObjectProperty ;
-                rdfs:subPropertyOf owl:topObjectProperty ;
-                rdf:type owl:AsymmetricProperty ;
-                rdfs:domain :ReferenceAssociation ;
-                rdfs:range :Concept ;
-                rdfs:isDefinedBy :referencesFrom .
+###  https://w3id.org/dsd#hasForeignKey
+dsd:hasForeignKey rdf:type owl:ObjectProperty ;
+                  rdfs:domain [ rdf:type owl:Class ;
+                                owl:unionOf ( dsd:Association
+                                              dsd:Concept
+                                            )
+                              ] ;
+                  rdfs:range dsd:ForeignKey ;
+                  rdfs:isDefinedBy dsd:hasForeignKey ;
+                  rdfs:label "has Foreign Key"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#referencesTo
-:referencesTo rdf:type owl:ObjectProperty ;
-              rdfs:subPropertyOf owl:topObjectProperty ;
-              rdfs:domain [ rdf:type owl:Class ;
-                            owl:unionOf ( :Concept
-                                          :PrimaryKey
-                                          :ReferenceAssociation
-                                        )
-                          ] ;
-              rdfs:range [ rdf:type owl:Class ;
-                           owl:unionOf ( :Concept
-                                         :ForeignKey
-                                         :ReferenceAssociation
-                                       )
-                         ] ;
-              rdfs:comment "A ForeignKey or Concept references to another Concept or a PrimaryKey."@en ;
-              rdfs:isDefinedBy :referencesTo ;
-              rdfs:label "referencesTo"@en .
+###  https://w3id.org/dsd#hasParent
+dsd:hasParent rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf dsd:hasAssociationMember ;
+              rdfs:domain dsd:InheritanceAssociation ;
+              rdfs:range dsd:Concept ;
+              rdfs:comment "Describes the connection between an InheritanceAssociation and a parent Concept." ;
+              rdfs:isDefinedBy dsd:hasParent ;
+              rdfs:label "has Parent" .
+
+
+###  https://w3id.org/dsd#hasPrimaryKey
+dsd:hasPrimaryKey rdf:type owl:ObjectProperty ,
+                           owl:FunctionalProperty ;
+                  rdfs:domain [ rdf:type owl:Class ;
+                                owl:unionOf ( dsd:Association
+                                              dsd:Concept
+                                            )
+                              ] ;
+                  rdfs:range dsd:PrimaryKey ;
+                  rdfs:isDefinedBy dsd:hasPrimaryKey ;
+                  rdfs:label "has Primary Key"@en .
+
+
+###  https://w3id.org/dsd#hasSchema
+dsd:hasSchema rdf:type owl:ObjectProperty ;
+              owl:inverseOf dsd:isSchemaOf ;
+              rdf:type owl:InverseFunctionalProperty ;
+              rdfs:domain dsd:Datasource ;
+              rdfs:range dsd:Schema ;
+              rdfs:label "has Schema"@en .
+
+
+###  https://w3id.org/dsd#isAttributeOf
+dsd:isAttributeOf rdf:type owl:ObjectProperty ;
+                  rdfs:domain dsd:Attribute ;
+                  rdfs:range [ rdf:type owl:Class ;
+                               owl:unionOf ( dsd:Association
+                                             dsd:Concept
+                                           )
+                             ] ;
+                  rdfs:comment "Describes an Attributes's connection to its Concept or Association."@en ;
+                  rdfs:isDefinedBy dsd:isAttributeOf ;
+                  rdfs:label "is Attribute of"@en .
+
+
+###  https://w3id.org/dsd#isComponentOf
+dsd:isComponentOf rdf:type owl:ObjectProperty ;
+                  rdfs:domain [ rdf:type owl:Class ;
+                                owl:unionOf ( dsd:Association
+                                              dsd:Attribute
+                                              dsd:Concept
+                                              dsd:ForeignKey
+                                              dsd:PrimaryKey
+                                            )
+                              ] ;
+                  rdfs:range [ rdf:type owl:Class ;
+                               owl:unionOf ( dsd:Datasource
+                                             dsd:Schema
+                                           )
+                             ] ;
+                  rdfs:comment "Describes a components connection to its Datasource."@en ;
+                  rdfs:isDefinedBy dsd:isComponentOf ;
+                  rdfs:label "is Component of"@en .
+
+
+###  https://w3id.org/dsd#isOfDataType
+dsd:isOfDataType rdf:type owl:ObjectProperty ,
+                          owl:FunctionalProperty ,
+                          owl:AsymmetricProperty ;
+                 rdfs:domain dsd:Attribute ;
+                 rdfs:comment "Describes an Attribute with an XLS Datatype."@en ;
+                 rdfs:isDefinedBy dsd:isOfDataType ;
+                 rdfs:label "is of Data Type"@en .
+
+
+###  https://w3id.org/dsd#isOfDatasourceType
+dsd:isOfDatasourceType rdf:type owl:ObjectProperty ,
+                                owl:FunctionalProperty ,
+                                owl:AsymmetricProperty ;
+                       rdfs:domain dsd:Datasource ;
+                       rdfs:range dsd:DatasourceType ;
+                       rdfs:comment "Describes the type of a Data Source. This vocabulary provides some Individuals that can be used."@en ;
+                       rdfs:isDefinedBy dsd:isOfDatasourceType ;
+                       rdfs:label "is of Data Source Type"@en .
+
+
+###  https://w3id.org/dsd#isSchemaOf
+dsd:isSchemaOf rdf:type owl:ObjectProperty ,
+                        owl:FunctionalProperty ;
+               rdfs:domain dsd:Schema ;
+               rdfs:range dsd:Datasource ;
+               rdfs:label "is Schema of"@en .
+
+
+###  https://w3id.org/dsd#referencesFrom
+dsd:referencesFrom rdf:type owl:ObjectProperty ;
+                   rdfs:subPropertyOf owl:topObjectProperty ;
+                   rdf:type owl:AsymmetricProperty ;
+                   rdfs:domain dsd:ReferenceAssociation ;
+                   rdfs:range dsd:Concept ;
+                   rdfs:isDefinedBy dsd:referencesFrom ;
+                   rdfs:label "references from" .
+
+
+###  https://w3id.org/dsd#referencesTo
+dsd:referencesTo rdf:type owl:ObjectProperty ;
+                 rdfs:subPropertyOf owl:topObjectProperty ;
+                 rdfs:domain [ rdf:type owl:Class ;
+                               owl:unionOf ( dsd:Concept
+                                             dsd:PrimaryKey
+                                             dsd:ReferenceAssociation
+                                           )
+                             ] ;
+                 rdfs:range [ rdf:type owl:Class ;
+                              owl:unionOf ( dsd:Concept
+                                            dsd:ForeignKey
+                                            dsd:ReferenceAssociation
+                                          )
+                            ] ;
+                 rdfs:comment "A ForeignKey or Concept references to another Concept or a PrimaryKey."@en ;
+                 rdfs:isDefinedBy dsd:referencesTo ;
+                 rdfs:label "referencesTo"@en .
 
 
 #################################################################
 #    Data properties
 #################################################################
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#avgInstanceLength
-:avgInstanceLength rdf:type owl:DatatypeProperty ;
-                   rdfs:subPropertyOf :hasConceptDescriptor ;
-                   rdfs:comment "Gives a value of the average (character) length of instances of this concept. E.g., row entries in a MySQL DB."@en ;
-                   rdfs:isDefinedBy :avgInstanceLength .
+###  https://w3id.org/dsd#avgInstanceLength
+dsd:avgInstanceLength rdf:type owl:DatatypeProperty ;
+                      rdfs:subPropertyOf dsd:hasConceptDescriptor ;
+                      rdfs:comment "Gives a value of the average (character) length of instances of this concept. E.g., row entries in a MySQL DB."@en ;
+                      rdfs:isDefinedBy dsd:avgInstanceLength ;
+                      rdfs:label "Average length of instance"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#constraintOnDelete
-:constraintOnDelete rdf:type owl:DatatypeProperty ;
-                    rdfs:subPropertyOf :hasFKDescriptor ;
-                    rdfs:range xsd:string ;
-                    rdfs:comment "Describes the constraint that is defined on a foreign key, which action should be carried out if the referenced primary key is deleted."@en ;
-                    rdfs:isDefinedBy :constraintOnDelete .
+###  https://w3id.org/dsd#constraintOnDelete
+dsd:constraintOnDelete rdf:type owl:DatatypeProperty ;
+                       rdfs:subPropertyOf dsd:hasFKDescriptor ;
+                       rdfs:range xsd:string ;
+                       rdfs:comment "Describes the constraint that is defined on a foreign key, which action should be carried out if the referenced primary key is deleted."@en ;
+                       rdfs:isDefinedBy dsd:constraintOnDelete ;
+                       rdfs:label "Constraint on Delete"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#constraintOnUpdate
-:constraintOnUpdate rdf:type owl:DatatypeProperty ;
-                    rdfs:subPropertyOf :hasFKDescriptor ;
-                    rdfs:range xsd:string ;
-                    rdfs:comment "Describes which constraint is defined on a foreign key if the referenced primary key content is updated."@en ;
-                    rdfs:isDefinedBy :constraintOnUpdate .
+###  https://w3id.org/dsd#constraintOnUpdate
+dsd:constraintOnUpdate rdf:type owl:DatatypeProperty ;
+                       rdfs:subPropertyOf dsd:hasFKDescriptor ;
+                       rdfs:range xsd:string ;
+                       rdfs:comment "Describes which constraint is defined on a foreign key if the referenced primary key content is updated."@en ;
+                       rdfs:isDefinedBy dsd:constraintOnUpdate ;
+                       rdfs:label "Constraint on Update"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#defaultValue
-:defaultValue rdf:type owl:DatatypeProperty ;
-              rdfs:subPropertyOf :hasAttributeDescriptor ;
-              rdf:type owl:FunctionalProperty ;
-              rdfs:range xsd:string ;
-              rdfs:comment :defaultValue ,
-                           "Provides an default value for an attribute."@en .
-
-
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#hasAssociationDescriptor
-:hasAssociationDescriptor rdf:type owl:DatatypeProperty ;
-                          rdfs:domain :Association ;
-                          rdfs:comment "Provides annotations for an association."@en ;
-                          rdfs:isDefinedBy :hasAssociationDescriptor .
-
-
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#hasAttributeDescriptor
-:hasAttributeDescriptor rdf:type owl:DatatypeProperty ;
-                        rdfs:domain :Attribute ;
-                        rdfs:comment "Provides annotations for an attribute."@en ;
-                        rdfs:isDefinedBy :hasAttributeDescriptor .
-
-
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#hasConceptDescriptor
-:hasConceptDescriptor rdf:type owl:DatatypeProperty ;
-                      rdfs:domain :Concept ;
-                      rdfs:comment "Provides annotations for a concept."@en ;
-                      rdfs:isDefinedBy :hasConceptDescriptor .
-
-
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#hasFKDescriptor
-:hasFKDescriptor rdf:type owl:DatatypeProperty ;
-                 rdfs:domain :ForeignKey ;
-                 rdfs:comment "Foreign key descriptor: A textual description of what should happen if the reference of this foreign key is modified (updated/deleted)."@en ;
-                 rdfs:isDefinedBy :hasFKDescriptor .
-
-
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#isAutoIncrement
-:isAutoIncrement rdf:type owl:DatatypeProperty ;
-                 rdfs:subPropertyOf :hasAttributeDescriptor ;
+###  https://w3id.org/dsd#defaultValue
+dsd:defaultValue rdf:type owl:DatatypeProperty ;
+                 rdfs:subPropertyOf dsd:hasAttributeDescriptor ;
                  rdf:type owl:FunctionalProperty ;
-                 rdfs:range xsd:boolean ;
-                 rdfs:comment :isAutoIncrement ,
-                              "If the attribute automatically increments on a new insertion of a new value."@en .
+                 rdfs:range xsd:string ;
+                 rdfs:comment dsd:defaultValue ,
+                              "Provides an default value for an attribute."@en ;
+                 rdfs:label "Default Value"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#isComplete
-:isComplete rdf:type owl:DatatypeProperty ;
-            rdfs:subPropertyOf :hasAssociationDescriptor ;
-            rdf:type owl:FunctionalProperty ;
-            rdfs:domain [ rdf:type owl:Class ;
-                          owl:unionOf ( :AggregationAssociation
-                                        :InheritanceAssociation
-                                      )
-                        ] ;
-            rdfs:range xsd:boolean ;
-            rdfs:comment "Defines whether an inheritance association is complete. If property is set to FALSE, the association is incomplete."@en ;
-            rdfs:isDefinedBy :isComplete .
+###  https://w3id.org/dsd#hasAssociationDescriptor
+dsd:hasAssociationDescriptor rdf:type owl:DatatypeProperty ;
+                             rdfs:domain dsd:Association ;
+                             rdfs:comment "Provides annotations for an association."@en ;
+                             rdfs:isDefinedBy dsd:hasAssociationDescriptor ;
+                             rdfs:label "has Association Descriptor"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#isDisjoint
-:isDisjoint rdf:type owl:DatatypeProperty ;
-            rdfs:subPropertyOf :hasAssociationDescriptor ;
-            rdf:type owl:FunctionalProperty ;
-            rdfs:domain :AggregationAssociation ,
-                        :InheritanceAssociation ;
-            rdfs:range xsd:boolean ;
-            rdfs:comment "Describes whether the children of an inheritance association are disjoint. If property is set to FALSE, the children are overlapping."@en ;
-            rdfs:isDefinedBy :isDisjoint .
+###  https://w3id.org/dsd#hasAttributeDescriptor
+dsd:hasAttributeDescriptor rdf:type owl:DatatypeProperty ;
+                           rdfs:domain dsd:Attribute ;
+                           rdfs:comment "Provides annotations for an attribute."@en ;
+                           rdfs:isDefinedBy dsd:hasAttributeDescriptor ;
+                           rdfs:label "has Attribute Descriptor"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#isNullable
-:isNullable rdf:type owl:DatatypeProperty ;
-            rdfs:subPropertyOf :hasAttributeDescriptor ;
-            rdf:type owl:FunctionalProperty ;
-            rdfs:range xsd:boolean ;
-            rdfs:comment :isNullable ,
-                         "If the attribute can contain NULL values."@en .
+###  https://w3id.org/dsd#hasConceptDescriptor
+dsd:hasConceptDescriptor rdf:type owl:DatatypeProperty ;
+                         rdfs:domain dsd:Concept ;
+                         rdfs:comment "Provides annotations for a concept."@en ;
+                         rdfs:isDefinedBy dsd:hasConceptDescriptor ;
+                         rdfs:label "has Concept Descriptor"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#isUnique
-:isUnique rdf:type owl:DatatypeProperty ;
-          rdfs:subPropertyOf :hasAttributeDescriptor ;
-          rdf:type owl:FunctionalProperty ;
-          rdfs:range xsd:boolean ;
-          rdfs:comment :isUnique ,
-                       "Describes if an attribute is unique or not."@en .
+###  https://w3id.org/dsd#hasFKDescriptor
+dsd:hasFKDescriptor rdf:type owl:DatatypeProperty ;
+                    rdfs:domain dsd:ForeignKey ;
+                    rdfs:comment "Foreign key descriptor: A textual description of what should happen if the reference of this foreign key is modified (updated/deleted)."@en ;
+                    rdfs:isDefinedBy dsd:hasFKDescriptor ;
+                    rdfs:label "has Foreign Key Descriptor"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#maxCharacterLength
-:maxCharacterLength rdf:type owl:DatatypeProperty ;
-                    rdfs:subPropertyOf :hasAttributeDescriptor ;
+###  https://w3id.org/dsd#isAutoIncrement
+dsd:isAutoIncrement rdf:type owl:DatatypeProperty ;
+                    rdfs:subPropertyOf dsd:hasAttributeDescriptor ;
                     rdf:type owl:FunctionalProperty ;
-                    rdfs:range xsd:integer ;
-                    rdfs:comment :maxCharacterLength ,
-                                 "Maximum character length of this attribute, given in the number of bits."@en .
+                    rdfs:range xsd:boolean ;
+                    rdfs:comment dsd:isAutoIncrement ,
+                                 "If the attribute automatically increments on a new insertion of a new value."@en ;
+                    rdfs:label "automatically increments"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#noOfInstances
-:noOfInstances rdf:type owl:DatatypeProperty ;
-               rdfs:subPropertyOf :hasConceptDescriptor ;
+###  https://w3id.org/dsd#isComplete
+dsd:isComplete rdf:type owl:DatatypeProperty ;
+               rdfs:subPropertyOf dsd:hasAssociationDescriptor ;
                rdf:type owl:FunctionalProperty ;
-               rdfs:range xsd:nonNegativeInteger ;
-               rdfs:comment :noOfInstances ,
-                            "Number of instances of a concept/association."@en .
+               rdfs:domain [ rdf:type owl:Class ;
+                             owl:unionOf ( dsd:AggregationAssociation
+                                           dsd:InheritanceAssociation
+                                         )
+                           ] ;
+               rdfs:range xsd:boolean ;
+               rdfs:comment "Defines whether an inheritance association is complete. If property is set to FALSE, the association is incomplete."@en ;
+               rdfs:isDefinedBy dsd:isComplete ;
+               rdfs:label "is Complete"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#ordinalPosition
-:ordinalPosition rdf:type owl:DatatypeProperty ;
-                 rdfs:subPropertyOf :hasAttributeDescriptor ;
-                 rdf:type owl:FunctionalProperty ;
-                 rdfs:range xsd:positiveInteger ;
-                 rdfs:comment :ordinalPosition ,
-                              "The ordinal position of the attribute to the concept, this information might not always be available (depending on the data source)."@en .
+###  https://w3id.org/dsd#isDisjoint
+dsd:isDisjoint rdf:type owl:DatatypeProperty ;
+               rdfs:subPropertyOf dsd:hasAssociationDescriptor ;
+               rdf:type owl:FunctionalProperty ;
+               rdfs:domain dsd:AggregationAssociation ,
+                           dsd:InheritanceAssociation ;
+               rdfs:range xsd:boolean ;
+               rdfs:comment "Describes whether the children of an inheritance association are disjoint. If property is set to FALSE, the children are overlapping."@en ;
+               rdfs:isDefinedBy dsd:isDisjoint ;
+               rdfs:label "is Disjoint"@en .
+
+
+###  https://w3id.org/dsd#isNullable
+dsd:isNullable rdf:type owl:DatatypeProperty ;
+               rdfs:subPropertyOf dsd:hasAttributeDescriptor ;
+               rdf:type owl:FunctionalProperty ;
+               rdfs:range xsd:boolean ;
+               rdfs:comment dsd:isNullable ,
+                            "If the attribute can contain NULL values."@en ;
+               rdfs:label "is Nullable"@en .
+
+
+###  https://w3id.org/dsd#isUnique
+dsd:isUnique rdf:type owl:DatatypeProperty ;
+             rdfs:subPropertyOf dsd:hasAttributeDescriptor ;
+             rdf:type owl:FunctionalProperty ;
+             rdfs:range xsd:boolean ;
+             rdfs:comment dsd:isUnique ,
+                          "Describes if an attribute is unique or not."@en ;
+             rdfs:label "is Unique"@en .
+
+
+###  https://w3id.org/dsd#maxCharacterLength
+dsd:maxCharacterLength rdf:type owl:DatatypeProperty ;
+                       rdfs:subPropertyOf dsd:hasAttributeDescriptor ;
+                       rdf:type owl:FunctionalProperty ;
+                       rdfs:range xsd:integer ;
+                       rdfs:comment dsd:maxCharacterLength ,
+                                    "Maximum character length of this attribute, given in the number of bits."@en ;
+                       rdfs:label "Maximum Character Length"@en .
+
+
+###  https://w3id.org/dsd#noOfInstances
+dsd:noOfInstances rdf:type owl:DatatypeProperty ;
+                  rdfs:subPropertyOf dsd:hasConceptDescriptor ;
+                  rdf:type owl:FunctionalProperty ;
+                  rdfs:range xsd:nonNegativeInteger ;
+                  rdfs:comment dsd:noOfInstances ,
+                               "Number of instances of a concept/association."@en ;
+                  rdfs:label "Number of Instances"@en .
+
+
+###  https://w3id.org/dsd#ordinalPosition
+dsd:ordinalPosition rdf:type owl:DatatypeProperty ;
+                    rdfs:subPropertyOf dsd:hasAttributeDescriptor ;
+                    rdf:type owl:FunctionalProperty ;
+                    rdfs:range xsd:positiveInteger ;
+                    rdfs:comment dsd:ordinalPosition ,
+                                 "The ordinal position of the attribute to the concept, this information might not always be available (depending on the data source)."@en ;
+                    rdfs:label "Ordinal Position"@en .
 
 
 #################################################################
 #    Classes
 #################################################################
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#AggregationAssociation
-:AggregationAssociation rdf:type owl:Class ;
-                        rdfs:subClassOf :Association ;
-                        rdfs:comment "Describes the relationship between an aggregation that is composed out of several components."@en ;
-                        rdfs:isDefinedBy :AggregationAssociation ;
-                        rdfs:label "Aggregation association"@en .
+
+###  https://w3id.org/dsd#AggregationAssociation
+dsd:AggregationAssociation rdf:type owl:Class ;
+                           rdfs:subClassOf dsd:Association ;
+                           rdfs:comment "Describes the relationship between an aggregation that is composed out of several components."@en ;
+                           rdfs:isDefinedBy dsd:AggregationAssociation ;
+                           rdfs:label "Aggregation association"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#Association
-:Association rdf:type owl:Class ;
-             rdfs:isDefinedBy :Association ;
-             rdfs:label "Association"@en .
+###  https://w3id.org/dsd#Association
+dsd:Association rdf:type owl:Class ;
+                rdfs:comment "An Association describes a relationship between two instances of the class Concept. There are three disjoint subclasses of Association for Aggregation, Inheritance, and Reference."@en ;
+                rdfs:isDefinedBy dsd:Association ;
+                rdfs:label "Association"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#Attribute
-:Attribute rdf:type owl:Class ;
-           rdfs:comment "An Attribute describes a property of a Concept."@en ;
-           rdfs:isDefinedBy :Attribute ;
-           rdfs:label "Attribute"@en .
+###  https://w3id.org/dsd#Attribute
+dsd:Attribute rdf:type owl:Class ;
+              rdfs:comment """An Attribute describes a property of a Concept. DSD also provides OWL data properties for the description of certain attribute characteristics, such as, nullable or unique.
+Example:  If a Concept represents a relational table, its attributes correspond to the columns."""@en ;
+              rdfs:isDefinedBy dsd:Attribute ;
+              rdfs:label "Attribute"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#Concept
-:Concept rdf:type owl:Class ;
-         owl:hasKey ( :hasPrimaryKey
-                    ) ;
-         rdfs:comment "A Concept defines a part of a data source that can be e.g. a class in an object oriented source or a table in a relational database."@en ;
-         rdfs:isDefinedBy :Concept ;
-         rdfs:label "Concept"@en .
+###  https://w3id.org/dsd#Concept
+dsd:Concept rdf:type owl:Class ;
+            owl:hasKey ( dsd:hasPrimaryKey
+                       ) ;
+            rdfs:comment """A representation of a strutural part of a Data Source.
+Example: Corresponds to a table or a view from a relational database; a class in object-oriented structures."""@en ;
+            rdfs:isDefinedBy dsd:Concept ;
+            rdfs:label "Concept"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#Datasource
-:Datasource rdf:type owl:Class ;
-            owl:disjointUnionOf ( :AggregationAssociation
-                                  :Attribute
-                                  :Concept
-                                  :ForeignKey
-                                  :InheritanceAssociation
-                                  :PrimaryKey
-                                  :ReferenceAssociation
-                                  :Schema
-                                ) ;
-            rdfs:comment "A generic class for a data source. Could be anything from RDF-Triple Store, relational Datasource, comma separated list or just semi-structured text files."@en ;
-            rdfs:isDefinedBy :Datasource ;
-            rdfs:label "Datasource"@en .
+###  https://w3id.org/dsd#Datasource
+dsd:Datasource rdf:type owl:Class ;
+               owl:disjointWith dsd:DatasourceType ;
+               owl:disjointUnionOf ( dsd:AggregationAssociation
+                                     dsd:Attribute
+                                     dsd:Concept
+                                     dsd:ForeignKey
+                                     dsd:InheritanceAssociation
+                                     dsd:PrimaryKey
+                                     dsd:ReferenceAssociation
+                                     dsd:Schema
+                                   ) ;
+               rdfs:comment """A generic class for representing data sources.
+Example: An instance of this class can represent a data source, e.g., a relational information system, a comma separated list, semi-structured text files or a graph. Optionally, an object property referencing an instance of Data Source Type may be present."""@en ;
+               rdfs:isDefinedBy dsd:Datasource ;
+               rdfs:label "Data source"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#DatasourceType
-:DatasourceType rdf:type owl:Class ;
-                rdfs:comment "Provides pre-defined Datasource Type Instances."@en ;
-                rdfs:isDefinedBy :DatasourceType ;
-                rdfs:label "Data model type"@en .
+###  https://w3id.org/dsd#DatasourceType
+dsd:DatasourceType rdf:type owl:Class ;
+                   rdfs:comment "This class provides instances of the most common data source types. These instances may be referenced from an instance of the class Data Source."@en ;
+                   rdfs:isDefinedBy dsd:DatasourceType ;
+                   rdfs:label "Data source type"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#ForeignKey
-:ForeignKey rdf:type owl:Class ;
-            rdfs:comment "References to a Primary key and consists of one or more Attributes."@en ;
-            rdfs:isDefinedBy :ForeignKey ;
-            rdfs:label "Foreign key"@en .
+###  https://w3id.org/dsd#ForeignKey
+dsd:ForeignKey rdf:type owl:Class ;
+               rdfs:comment "References to a Primary key and consists of one or more Attributes."@en ;
+               rdfs:isDefinedBy dsd:ForeignKey ;
+               rdfs:label "Foreign key"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#InheritanceAssociation
-:InheritanceAssociation rdf:type owl:Class ;
-                        rdfs:subClassOf :Association ;
-                        rdfs:comment "Describes the relationship between several child Concepts and their parent."@en ;
-                        rdfs:isDefinedBy :InheritanceAssociation ;
-                        rdfs:label "Inheritance association"@en .
+###  https://w3id.org/dsd#InheritanceAssociation
+dsd:InheritanceAssociation rdf:type owl:Class ;
+                           rdfs:subClassOf dsd:Association ;
+                           rdfs:comment "Describes the relationship between several child Concepts and their parent."@en ;
+                           rdfs:isDefinedBy dsd:InheritanceAssociation ;
+                           rdfs:label "Inheritance association"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#PrimaryKey
-:PrimaryKey rdf:type owl:Class ;
-            rdfs:comment "Identifies a Concept and consists of one or more Attributes."@en ;
-            rdfs:isDefinedBy :PrimaryKey ;
-            rdfs:label "Primary key"@en .
+###  https://w3id.org/dsd#PrimaryKey
+dsd:PrimaryKey rdf:type owl:Class ;
+               rdfs:comment "Identifies a Concept and consists of one or more Attributes."@en ;
+               rdfs:isDefinedBy dsd:PrimaryKey ;
+               rdfs:label "Primary key"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#ReferenceAssociation
-:ReferenceAssociation rdf:type owl:Class ;
-                      rdfs:subClassOf :Association ;
-                      rdfs:comment "Describes a regular relationship between two or more Concepts."@en ;
-                      rdfs:isDefinedBy :ReferenceAssociation ;
-                      rdfs:label "Reference association"@en .
+###  https://w3id.org/dsd#ReferenceAssociation
+dsd:ReferenceAssociation rdf:type owl:Class ;
+                         rdfs:subClassOf dsd:Association ;
+                         rdfs:comment "Describes a regular relationship between two or more Concepts."@en ;
+                         rdfs:isDefinedBy dsd:ReferenceAssociation ;
+                         rdfs:label "Reference association"@en .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#Schema
-:Schema rdf:type owl:Class ;
-        rdfs:comment "A Schema groups multiple concepts. It is an optional hierachy level between a Datasource and the concepts."^^xsd:string ;
-        rdfs:label "Schema"@en .
-
-
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#Stakeholder
-:Stakeholder rdf:type owl:Class ;
-             rdfs:comment "A stakeholder has access to a Datasource or a Concept of a Datasource. A stakeholder is typically a department of a company but can also be a person or a organization."@en ;
-             rdfs:isDefinedBy :Stakeholder ;
-             rdfs:label "Stakeholder"@en .
+###  https://w3id.org/dsd#Schema
+dsd:Schema rdf:type owl:Class ;
+           rdfs:comment "Instances of the class Schema provide an optional  hierarchy level between an instance of Data Source and instances of Concept. Schemas allow the grouping of Concepts and are very common in enterprise databases."@en ;
+           rdfs:label "Schema"@en .
 
 
 #################################################################
 #    Individuals
 #################################################################
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#CSV_File
-:CSV_File rdf:type owl:NamedIndividual ,
-                   :DatasourceType .
+###  https://w3id.org/dsd#CSV_File
+dsd:CSV_File rdf:type owl:NamedIndividual ,
+                      dsd:DatasourceType .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#Completeness
-:Completeness rdf:type owl:NamedIndividual .
+###  https://w3id.org/dsd#Completeness
+dsd:Completeness rdf:type owl:NamedIndividual .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#Correctness
-:Correctness rdf:type owl:NamedIndividual .
+###  https://w3id.org/dsd#Correctness
+dsd:Correctness rdf:type owl:NamedIndividual .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#Excel_Sheet
-:Excel_Sheet rdf:type owl:NamedIndividual ,
-                      :DatasourceType .
+###  https://w3id.org/dsd#Excel_Sheet
+dsd:Excel_Sheet rdf:type owl:NamedIndividual ,
+                         dsd:DatasourceType .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#Minimality
-:Minimality rdf:type owl:NamedIndividual .
+###  https://w3id.org/dsd#Minimality
+dsd:Minimality rdf:type owl:NamedIndividual .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#NoSQL_DB
-:NoSQL_DB rdf:type owl:NamedIndividual ,
-                   :DatasourceType .
+###  https://w3id.org/dsd#NoSQL_DB
+dsd:NoSQL_DB rdf:type owl:NamedIndividual ,
+                      dsd:DatasourceType .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#OO_DB
-:OO_DB rdf:type owl:NamedIndividual ,
-                :DatasourceType .
+###  https://w3id.org/dsd#OO_DB
+dsd:OO_DB rdf:type owl:NamedIndividual ,
+                   dsd:DatasourceType .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#Pertinence
-:Pertinence rdf:type owl:NamedIndividual .
+###  https://w3id.org/dsd#Pertinence
+dsd:Pertinence rdf:type owl:NamedIndividual .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#PlainText
-:PlainText rdf:type owl:NamedIndividual ,
-                    :DatasourceType .
+###  https://w3id.org/dsd#PlainText
+dsd:PlainText rdf:type owl:NamedIndividual ,
+                       dsd:DatasourceType .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#RDF_Store
-:RDF_Store rdf:type owl:NamedIndividual ,
-                    :DatasourceType .
+###  https://w3id.org/dsd#RDF_Store
+dsd:RDF_Store rdf:type owl:NamedIndividual ,
+                       dsd:DatasourceType .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#Relational_DB
-:Relational_DB rdf:type owl:NamedIndividual ,
-                        :DatasourceType .
+###  https://w3id.org/dsd#Relational_DB
+dsd:Relational_DB rdf:type owl:NamedIndividual ,
+                           dsd:DatasourceType .
 
 
-###  http://dqm.faw.jku.at/ontologies/dsd_v3#XML_File
-:XML_File rdf:type owl:NamedIndividual ,
-                   :DatasourceType .
+###  https://w3id.org/dsd#XML_File
+dsd:XML_File rdf:type owl:NamedIndividual ,
+                      dsd:DatasourceType .
 
 
 #################################################################
@@ -560,19 +594,11 @@
 #################################################################
 
 [ rdf:type owl:AllDisjointClasses ;
-  owl:members ( :AggregationAssociation
-                :InheritanceAssociation
-                :ReferenceAssociation
+  owl:members ( dsd:AggregationAssociation
+                dsd:InheritanceAssociation
+                dsd:ReferenceAssociation
               )
 ] .
 
 
-[ rdf:type owl:AllDisjointClasses ;
-  owl:members ( :Datasource
-                :DatasourceType
-                :Stakeholder
-              )
-] .
-
-
-###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
+###  Generated by the OWL API (version 4.5.24.2023-01-14T21:28:32Z) https://github.com/owlcs/owlapi
