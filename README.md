@@ -10,9 +10,7 @@ A scientific publication about the DSD vocabulary is currently submitted for rev
 
 ## FAIR
 
-Starting with version 4.0, the DSD vocabulary is evaluated automatically and manually against the FAIR principles[^1].
-
-[^1] Wilkinson et al. ‘The FAIR Guiding Principles for Scientific Data Management and Stewardship’. Scientific Data 3, no. 1 (December 2016): 160018. <https://doi.org/10.1038/sdata.2016.18>.
+Starting with version 4.0, the DSD vocabulary is evaluated automatically and manually against the FAIR principles [[1]](#1).
 
 - The result of a manual evalaution is available at <https://w3id.org/dsd/evaluation>
 - The vocabulary in version 4.0 was evaluated using the [Fair Ontology Pitfall Scanner (FOOPS!)](https://w3id.org/foops). It received a score of 78%, although several issues highlighted by FOOPS! are not present when looking at the DSD manually (e.g., metadata for authors are indeed present). We therefore claim that the real score will be higher than 78%.
@@ -39,3 +37,7 @@ The Data Source Description Vocabulary (DSD) is available under the LGPL-2.1 lic
 - Contributor: Johannes Schrott (<johannes.schrott@jku.at>, <johannes.schrott@scch.at>)
 
 Homepage: <https://dqm.faw.jku.at>
+
+## References
+
+<span id=1>[1]</span> Wilkinson et al. ‘The FAIR Guiding Principles for Scientific Data Management and Stewardship’. Scientific Data 3, no. 1 (December 2016): 160018. <https://doi.org/10.1038/sdata.2016.18>.
