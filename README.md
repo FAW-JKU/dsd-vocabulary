@@ -1,3 +1,10 @@
+
+
+![GitHub](https://img.shields.io/github/license/FAW-JKU/dsd-vocabulary)
+[![DOI](https://zenodo.org/badge/611169266.svg)](https://zenodo.org/badge/latestdoi/611169266)
+
+
+
 # The Data Source Description Vocabulary (DSD)
 
 The Data Source Description Vocabulary (DSD) is an vocabulary based on RDF and OWL that can be used to represent data sources and their internal structure in ontologies.
