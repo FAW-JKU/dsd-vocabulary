@@ -10,6 +10,8 @@
 @prefix void: <http://rdfs.org/ns/void#> .
 @prefix schema: <http://schema.org/> .
 @prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix bibo: <http://purl.org/ontology/bibo/> .
+@prefix sw: <http://www.w3.org/2003/06/sw-vocab-status/ns#> .
 @base <https://w3id.org/dsd> .
 
 <https://w3id.org/dsd> rdf:type owl:Ontology ;
@@ -27,7 +29,7 @@
                                         ] ;
                         dcterms:description "The Data Source Description Vocabulary (DSD) allows the representation of data sources and their internal structure independently of their type. The figure below provides an overview on OWL classes and object properties present in the vocabulary. For simplicity, inverse object properties and some subclasses are not shown. Additionally, a distinction between \"essential\" OWL classes, that are required for the description of data sources, and \"optional\" classes, which provide additional non-necessary features, is being made.<br><img src=\"https://dqm.faw.jku.at/ontologies/dsd/4.0.0/DSD4.png\" style=\"width: calc(100%); max-width: 1000px\">" ;
                         dcterms:license "LGPL-2.1 license", <https://w3id.org/dsd/LICENSE> ;
-                        dcterms:modified "2023-03-06" ;
+                        dcterms:modified "2023-03-27"^^xsd:date ;
                         dcterms:publisher [ rdf:type foaf:Organization ;
                                             foaf:homepage "https://www.jku.at/faw" ;
                                             foaf:name "Institute for Application-oriented Knowledge Processeing, Johannes Kepler University Linz, Austria"
@@ -36,9 +38,12 @@
                         vann:preferredNamespacePrefix "dsd" ;
                         vann:preferredNamespaceUri "https://w3id.org/dsd#" ;
                         schema:citation "Cite this vocabulary as: Ehrlinger, L. The Data Source Description vocabulary 4.0.0."@en ;
-                        dcterms:issued "2023-03-06"^^xsd:date ;
+                        dcterms:issued "2023-03-27"^^xsd:date ;
                         owl:versionInfo "4.0.0" ;
-                        foaf:depiction <https://dqm.faw.jku.at/ontologies/dsd/4.0.0/DSD4.png> .
+                        foaf:depiction <https://dqm.faw.jku.at/ontologies/dsd/4.0.0/DSD4.png> ;
+                        foaf:logo <https://w3id.org/dsd/logo.png> ;
+                        bibo:doi: "to be added" ;
+                        sw:status: "stable".
 
 
 
@@ -144,6 +149,7 @@ dsd:hasForeignKey rdf:type owl:ObjectProperty ;
                               ] ;
                   rdfs:range dsd:ForeignKey ;
                   rdfs:isDefinedBy dsd:hasForeignKey ;
+                  rdfs:comment "Connects an Association or an Concept with its foreign key." ;
                   rdfs:label "has Foreign Key"@en .
 
 
@@ -167,6 +173,7 @@ dsd:hasPrimaryKey rdf:type owl:ObjectProperty ,
                               ] ;
                   rdfs:range dsd:PrimaryKey ;
                   rdfs:isDefinedBy dsd:hasPrimaryKey ;
+                  rdfs:comment "Connects an Association or an Concept with it primary key." ;
                   rdfs:label "has Primary Key"@en .
 
 
@@ -176,6 +183,7 @@ dsd:hasSchema rdf:type owl:ObjectProperty ;
               rdf:type owl:InverseFunctionalProperty ;
               rdfs:domain dsd:Datasource ;
               rdfs:range dsd:Schema ;
+              rdfs:comment "Describes the schemas a data source may consist of." ;
               rdfs:label "has Schema"@en .
 
 
@@ -238,17 +246,8 @@ dsd:isSchemaOf rdf:type owl:ObjectProperty ,
                         owl:FunctionalProperty ;
                rdfs:domain dsd:Schema ;
                rdfs:range dsd:Datasource ;
+               rdfs:comment "Describes to which data source a schema belongs to." ;
                rdfs:label "is Schema of"@en .
-
-
-###  https://w3id.org/dsd#referencesFrom
-dsd:referencesFrom rdf:type owl:ObjectProperty ;
-                   rdfs:subPropertyOf owl:topObjectProperty ;
-                   rdf:type owl:AsymmetricProperty ;
-                   rdfs:domain dsd:ReferenceAssociation ;
-                   rdfs:range dsd:Concept ;
-                   rdfs:isDefinedBy dsd:referencesFrom ;
-                   rdfs:label "references from" .
 
 
 ###  https://w3id.org/dsd#referencesTo
@@ -257,16 +256,16 @@ dsd:referencesTo rdf:type owl:ObjectProperty ;
                  rdfs:domain [ rdf:type owl:Class ;
                                owl:unionOf ( dsd:Concept
                                              dsd:PrimaryKey
-                                             dsd:ReferenceAssociation
+                                             dsd:Association
                                            )
                              ] ;
                  rdfs:range [ rdf:type owl:Class ;
                               owl:unionOf ( dsd:Concept
                                             dsd:ForeignKey
-                                            dsd:ReferenceAssociation
+                                            dsd:Association
                                           )
                             ] ;
-                 rdfs:comment "A ForeignKey or Concept references to another Concept or a PrimaryKey."@en ;
+                 rdfs:comment "A PrimaryKey, Concept or any kind of Association references to another Concept, ForeignKey or Association."@en ;
                  rdfs:isDefinedBy dsd:referencesTo ;
                  rdfs:label "referencesTo"@en .
 
@@ -445,7 +444,7 @@ dsd:AggregationAssociation rdf:type owl:Class ;
 
 ###  https://w3id.org/dsd#Association
 dsd:Association rdf:type owl:Class ;
-                rdfs:comment "An Association describes a relationship between two instances of the class Concept. There are three disjoint subclasses of Association for Aggregation, Inheritance, and Reference."@en ;
+                rdfs:comment " A dsd:Association describes a relationship between two instances of dsd:Concept. There are three dsd:Association subclasses for aggregation, inheritance, and reference associations."@en ;
                 rdfs:isDefinedBy dsd:Association ;
                 rdfs:label "Association"@en .
 
@@ -462,8 +461,8 @@ Example:  If a Concept represents a relational table, its attributes correspond 
 dsd:Concept rdf:type owl:Class ;
             owl:hasKey ( dsd:hasPrimaryKey
                        ) ;
-            rdfs:comment """A representation of a strutural part of a Data Source.
-Example: Corresponds to a table or a view from a relational database; a class in object-oriented structures."""@en ;
+            rdfs:comment """A representation of a structural part of a data source. 
+Example: A dsd:Concept can represent a table or a view of a relational database or a class in object-oriented structures."""@en ;
             rdfs:isDefinedBy dsd:Concept ;
             rdfs:label "Concept"@en .
 
@@ -480,15 +479,15 @@ dsd:Datasource rdf:type owl:Class ;
                                      dsd:ReferenceAssociation
                                      dsd:Schema
                                    ) ;
-               rdfs:comment """A generic class for representing data sources.
-Example: An instance of this class can represent a data source, e.g., a relational information system, a comma separated list, semi-structured text files or a graph. Optionally, an object property referencing an instance of Data Source Type may be present."""@en ;
+               rdfs:comment """A generic class for representing data sources. 
+               Example: A dsd:DataSource can represent structured data such as relational databases, semi-structured data like XML files, or NoSQL databases such as graph databases or wide-column stores. A dsd:DataSource can be assigned to an instance of dsd:DataSourceType."""@en ;
                rdfs:isDefinedBy dsd:Datasource ;
                rdfs:label "Data source"@en .
 
 
 ###  https://w3id.org/dsd#DatasourceType
 dsd:DatasourceType rdf:type owl:Class ;
-                   rdfs:comment "This class provides instances of the most common data source types. These instances may be referenced from an instance of the class Data Source."@en ;
+                   rdfs:comment "This class provides instances of the most common data source types, which can be assigned to instance of dsd:DataSource."@en ;
                    rdfs:isDefinedBy dsd:DatasourceType ;
                    rdfs:label "Data source type"@en .
 
@@ -525,7 +524,7 @@ dsd:ReferenceAssociation rdf:type owl:Class ;
 
 ###  https://w3id.org/dsd#Schema
 dsd:Schema rdf:type owl:Class ;
-           rdfs:comment "Instances of the class Schema provide an optional  hierarchy level between an instance of Data Source and instances of Concept. Schemas allow the grouping of Concepts and are very common in enterprise databases."@en ;
+           rdfs:comment "Instances of dsd:Schema provide an optional hierarchy level between an instance of dsd:DataSource and instances of dsd:Concept. Schemas allow the grouping of concepts and are very common in enterprise databases."@en ;
            rdfs:label "Schema"@en .
 
 
